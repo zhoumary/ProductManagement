@@ -1,0 +1,143 @@
+{
+  "_version": "1.8.0",
+  "sap.app": {
+    "id": "PM",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "1.0.0"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "ach": "ach",
+    "dataSources": {
+      "productRemote": {
+        "uri": "http://localhost:8081/https://services.odata.org/V2/Northwind/Northwind.svc/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+
+  "sap.ui5": {
+    "rootView": {
+      "viewName": "PM.view.Main",
+      "type": "XML",
+      "async": true,
+      "id": "app"
+    },
+    "dependencies": {
+      "minUI5Version": "1.30.0",
+      "libs": {
+        "sap.ui.core": {},
+        "sap.m": {},
+        "sap.f": {},
+        "sap.ui.layout": {}
+     }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "PM.i18n.i18n"
+        }
+      },
+      "products": {
+        "dataSource": "productRemote"
+      }
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.f.routing.Router",
+        "viewType": "XML",
+        "viewPath": "PM.view",
+        "controlId": "layout",
+        "controlAggregation": "midColumnPages",
+        "bypassed": {
+          "target": [
+            "productCategory",
+            "product"
+          ]
+        },
+        "async": true
+      },
+      "routes": [
+        {
+          "pattern": "",
+          "name": "productCategory",
+          "target": [
+            "productCategory",
+            "product"
+          ]
+        },
+        {
+          "pattern": "product/{categoryID}",
+          "name": "product",
+          "target": [
+            "productCategory",
+            "productList"
+          ]
+        },
+        {
+          "pattern": "detail/{productPath}",
+          "name": "detail",
+          "target": [
+            "productCategory",
+            "detail"
+          ]
+        }
+      ],
+      "targets": {
+        "productCategory": {
+          "viewId": "productCategory",
+          "viewName": "ProductCategory",
+          "controlAggregation": "beginColumnPages"
+        },
+        "product": {
+          "viewId": "product",
+          "viewName": "ProductDetail",
+          "controlAggregation": "midColumnPages"
+        },
+        "detail": {
+          "viewId": "detail",
+          "viewName": "Product",
+          "controlAggregation": "midColumnPages"
+        },
+        "productList": {
+          "viewId": "productList",
+          "viewName": "CategoryProducts",
+          "controlAggregation": "midColumnPages"
+        }
+      }
+    },
+    "resources": {
+      "css": [{
+        "uri": "css/style.css"
+      }]
+    }
+  }
+}
